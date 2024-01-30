@@ -59,7 +59,7 @@ recode cunconn (1/max=1), gen(dunconn) //bridging potential dummy variable: as l
 replace cunconn_w=. if nwsize==1
 replace dunconn_w=. if nwsize==1
 
-**poorly connnected pairs**
+**poorly connected pairs**
 sum TALKFREQ1- TALKFREQ5
 
 **2. less than once a year ---  (**eventually used** --> 0/1=0; 2/8=1 : 
@@ -109,7 +109,7 @@ replace disoal =. if nwsize==1
 recode TALKFREQ1-TALKFREQ5 (0/1=0) (2/8=1), gen(yt11 yt12 yt13 yt14 yt15)
 egen yt01 = rowtotal(yt11 yt12 yt13 yt14 yt15), missing
 
-*isolated alters as long as anyline in yt_w is 0, meaning there is isolate in ego's network
+*isolated alters as long as any line in yt_w is 0, meaning there is an isolate in ego's network
 egen isoal01 = anymatch(yt01), value(0)
 egen cisoal01=total(isoal01), by(ID) 
 recode cisoal01 (1/max=1), gen(disoal01)
@@ -124,10 +124,16 @@ replace disoal01 =. if nwsize==1
 sum yt1 yt2 yt3 yt4 yt5
 tab yt,m
 
+// presence of ties among alters, divided by network size 
 gen eachredun = yt/nwsize
 
+// for each ego, adds up their total redundant ties (total ties present among alters per network)
 egen ttlredun= sum(eachredun), by(ID)
+
+// effective network size: total network size - redundant network size (technically a scaled measure of density) 
 gen effsize=nwsize - ttlredun
+
+// network efficiency 
 gen effici = effsize/nwsize
 
 //recode R  = missing if name <2 alters, because network efficiency needs at least 2 alters
