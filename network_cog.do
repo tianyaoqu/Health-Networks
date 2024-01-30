@@ -204,6 +204,8 @@ foreach var of local mvars {
 }
 egen moca_sa = rowtotal(`scorevars')
 lab var moca_sa       "Total MoCA-SA score"
+
+// check validity
 alpha moca_month2_score moca_date2_score moca_rhino_score moca_contour_score moca_numbers_score moca_hands_score moca_trail2_score moca_5numbers_score moca_3numbers_score moca_subcat_score moca_sentcat_score moca_word2_score moca_alike2_score moca_face_score moca_velvet_score moca_church_score moca_daisy_score moca_red_score     
 
  
